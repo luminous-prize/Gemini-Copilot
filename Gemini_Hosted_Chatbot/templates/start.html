@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gateway</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e0e7ff;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            margin: 100px auto;
+        }
+        h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-group input {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        .form-group button {
+            width: auto;
+            padding: 10px 20px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #357ab7;
+        }
+        .error {
+            color: red;
+            margin-bottom: 15px;
+        }
+        .footer {
+            width: 100%;
+            background-color: #4a90e2;
+            color: white;
+            text-align: center;
+            padding: 5px 0;
+            border-top: 2px solid #357ab7;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Gateway</h1>
+    </div>
+    <div class="container">
+        <h2>Tenant Details</h2>
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        <form method="post">
+            <div class="form-group">
+                <input type="text" name="tenant_id" placeholder="Tenant ID" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Connect</button>
+            </div>
+        </form>
+        <div class="footer">OBSERVABILITY</div>
+    </div>
+</body>
+</html>
