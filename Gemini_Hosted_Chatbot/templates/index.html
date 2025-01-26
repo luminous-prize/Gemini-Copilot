@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observability Copilot</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e0e7ff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 40px);
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #4a90e2;
+            font-size: 2em;
+            text-align: center;
+        }
+        .chat-box {
+            flex-grow: 1;
+            width: 100%;
+            max-width: 950px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 10px;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+        }
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            max-width: 70%;
+        }
+        .message .title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .user-message {
+            text-align: right;
+            color: #007bff;
+            align-self: flex-end;
+            background-color: #d1e7ff;
+            border-radius: 15px 15px 0 15px;
+            padding: 15px;
+            font-size: 1.1em;
+        }
+        .bot-message {
+            text-align: left;
+            color: #28a745;
+            align-self: flex-start;
+            background-color: #d4edda;
+            border-radius: 15px 15px 15px 0;
+            padding: 15px;
+            font-size: 1.1em;
+        }
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .chat-input {
+            flex-grow: 1;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+        .send-button {
+            width: 50px;
+            height: 50px;
+            background-color: #4a90e2;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .send-button:hover {
+            background-color: #357ab7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Copilot</h1>
+        <div class="chat-box" id="chat-box"></div>
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Message Copilot...">
+            <button class="send-button" onclick="sendMessage()">&#x2191;</button>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const chatInput = document.getElementById('chat-input');
+
+        function addMessageToChat(message, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message ' + sender + '-message';
+            messageElement.innerHTML = `<div class="title">${sender}</div><div>${message}</div>`;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function sendMessage() {
+            const message = chatInput.value;
+            if (message.trim() === '') return;
+
+            addMessageToChat(message, 'User');
+            chatInput.value = '';
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                addMessageToChat(data.response, 'Assistant');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
